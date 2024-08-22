@@ -148,6 +148,27 @@ elif page == "Predict Fare":
         input_data_scaled = scaler.transform(input_data)
 
         # Add a button to predict the fare
+
+        button_style = """
+            <style>
+            .stButton > button {
+                background-color: #FF69B4; /* grey background */
+                color: black; /* White text */
+                font-size: 20px; /* Increase font size */
+                padding: 10px 20px; /* Increase padding */
+                border-radius: 12px; /* Add rounded corners */
+                border: 2px solid #FF69B4; /* Add a border */
+                box-shadow: 2px 2px 5px grey; /* Add a shadow */
+            }
+
+            .stButton > button:hover {
+                background-color: #FFB6C1; /* Darker grey on hover */
+            }
+            </style>
+        """
+
+# Apply the custom CSS
+        st.markdown(button_style, unsafe_allow_html=True)
         if st.button("Predict Fare"):
             # Make predictions
             prediction = model.predict(input_data_scaled)
@@ -190,8 +211,8 @@ elif page == "Data Insights":
     col3, col4, col5 = st.columns(3)
 
     with col3:
-        total_revenue = df['fare_amount'].sum()
-        st.metric("Total Revenue", f"${total_revenue:.2f}")
+        total_revenue = round(df['fare_amount'].sum()/365*7)
+        st.metric("Total Revenue per day ", f"${total_revenue:.2f}")
 
     with col4:
         trip_distance = df['trip_distance_km'].mean()
@@ -218,7 +239,7 @@ elif page == "Data Insights":
     st.plotly_chart(fig)    
 
     # Raw data
-    st.subheader("Raw Data")
+    st.subheader("The Dataset")
     st.dataframe(df)
 
 
@@ -234,40 +255,40 @@ elif page == "Data Insights":
 
     
 
-def plot_with_colorful_background(df):
-    # Create a figure with a custom background color
-    fig, ax = plt.subplots(figsize=(12, 7))
-    fig.patch.set_facecolor('lightyellow')  # Background color for the entire figure
+    def plot_with_colorful_background(df):
+        # Create a figure with a custom background color
+        fig, ax = plt.subplots(figsize=(12, 7))
+        fig.patch.set_facecolor('lightyellow')  # Background color for the entire figure
 
-    # Plot Average Fare by Hour of the Day using Seaborn
-    average_fare_by_hour = df.groupby('Hour')['fare_amount'].mean().reset_index()
-    sns.lineplot(data=average_fare_by_hour, x='Hour', y='fare_amount', marker='o', color='blue', linewidth=2.5, ax=ax)
+        # Plot Average Fare by Hour of the Day using Seaborn
+        average_fare_by_hour = df.groupby('Hour')['fare_amount'].mean().reset_index()
+        sns.lineplot(data=average_fare_by_hour, x='Hour', y='fare_amount', marker='o', color='blue', linewidth=2.5, ax=ax)
 
-    # Customizing the plot
-    ax.set_title('Average Fare Amount by Hour of the Day', fontsize=16, color='darkblue')
-    ax.set_xlabel('Hour of the Day', fontsize=14, color='darkblue')
-    ax.set_ylabel('Average Fare Amount ($)', fontsize=14, color='darkblue')
-    ax.set_xticks(range(0, 24))
-    ax.grid(True, color='lightgray')
-    ax.set_facecolor('lightcyan')  # Background color for the plotting area
-    st.pyplot(fig)
+        # Customizing the plot
+        ax.set_title('Average Fare Amount by Hour of the Day', fontsize=16, color='darkblue')
+        ax.set_xlabel('Hour of the Day', fontsize=14, color='darkblue')
+        ax.set_ylabel('Average Fare Amount ($)', fontsize=14, color='darkblue')
+        ax.set_xticks(range(0, 24))
+        ax.grid(True, color='lightgray')
+        ax.set_facecolor('lightcyan')  # Background color for the plotting area
+        st.pyplot(fig)
 
-    # Create a figure with a custom background color for the second plot
-    fig, ax = plt.subplots(figsize=(12, 7))
-    fig.patch.set_facecolor('lightpink')  # Background color for the entire figure
+        # Create a figure with a custom background color for the second plot
+        fig, ax = plt.subplots(figsize=(12, 7))
+        fig.patch.set_facecolor('lightpink')  # Background color for the entire figure
 
-    # Plot Average Fare by Month of the Year using Seaborn
-    average_fare_by_month = df.groupby('Month')['fare_amount'].mean().reset_index()
-    sns.lineplot(data=average_fare_by_month, x='Month', y='fare_amount', marker='o', color='green', linewidth=2.5, ax=ax)
+        # Plot Average Fare by Month of the Year using Seaborn
+        average_fare_by_month = df.groupby('Month')['fare_amount'].mean().reset_index()
+        sns.lineplot(data=average_fare_by_month, x='Month', y='fare_amount', marker='o', color='green', linewidth=2.5, ax=ax)
 
-    # Customizing the plot
-    ax.set_title('Average Fare Amount by Month of the Year', fontsize=16, color='darkgreen')
-    ax.set_xlabel('Month', fontsize=14, color='darkgreen')
-    ax.set_ylabel('Average Fare Amount ($)', fontsize=14, color='darkgreen')
-    ax.set_xticks(range(1, 13))
-    ax.grid(True, color='lightgray')
-    ax.set_facecolor('lightyellow')  # Background color for the plotting area
-    st.pyplot(fig)
+        # Customizing the plot
+        ax.set_title('Average Fare Amount by Month of the Year', fontsize=16, color='darkgreen')
+        ax.set_xlabel('Month', fontsize=14, color='darkgreen')
+        ax.set_ylabel('Average Fare Amount ($)', fontsize=14, color='darkgreen')
+        ax.set_xticks(range(1, 13))
+        ax.grid(True, color='lightgray')
+        ax.set_facecolor('lightyellow')  # Background color for the plotting area
+        st.pyplot(fig)
 
-st.subheader("Time Analysis")
-plot_with_colorful_background(df)
+    st.subheader("Price Analysis")
+    plot_with_colorful_background(df)
