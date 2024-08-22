@@ -1,0 +1,6 @@
+python                : 3.12.4
+python-bits           : 64
+OS                    : Darwin
+OS-release            : 23.5.0
+pandas                : 2.2.2
+numpy                 : 1.26.4 
